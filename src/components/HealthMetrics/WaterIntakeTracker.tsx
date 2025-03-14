@@ -1,8 +1,7 @@
-
 import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Droplet, Plus, Minus } from 'lucide-react';
+import { Plus, Minus } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const WaterIntakeTracker: React.FC = () => {
@@ -30,7 +29,6 @@ const WaterIntakeTracker: React.FC = () => {
             <CardTitle className="text-xl">Water Intake</CardTitle>
             <CardDescription>Track your daily hydration</CardDescription>
           </div>
-          <Droplet className="h-6 w-6 text-blue-400" />
         </div>
       </CardHeader>
       <CardContent>
@@ -113,7 +111,7 @@ const WaterIntakeTracker: React.FC = () => {
               className="bg-blue-50 p-3 rounded-lg"
             >
               {lastAction === 'add' ? (
-                <p className="text-sm text-blue-700">Great job staying hydrated! 💧</p>
+                <p className="text-sm text-blue-700">Great job staying hydrated!</p>
               ) : lastAction === 'remove' ? (
                 <p className="text-sm text-slate-700">Adjusted your water intake.</p>
               ) : (
