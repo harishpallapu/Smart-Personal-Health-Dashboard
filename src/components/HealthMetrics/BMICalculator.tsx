@@ -1,10 +1,6 @@
-
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
-import { Scale } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const BMICalculator: React.FC = () => {
@@ -49,7 +45,7 @@ const BMICalculator: React.FC = () => {
             <CardTitle className="text-xl">BMI Calculator</CardTitle>
             <CardDescription>Calculate your Body Mass Index</CardDescription>
           </div>
-          <Scale className="h-6 w-6 text-health-blue opacity-80" />
+          {/* Removed Scale (BMI symbol) icon */}
         </div>
       </CardHeader>
       <CardContent>
