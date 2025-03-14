@@ -1,7 +1,6 @@
-
 import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Moon, Sunrise, Sunset } from 'lucide-react';
+import { Sunrise, Sunset } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
@@ -56,7 +55,6 @@ const SleepTracker: React.FC = () => {
             <CardTitle className="text-xl">Sleep Tracker</CardTitle>
             <CardDescription>Monitor your sleep patterns</CardDescription>
           </div>
-          <Moon className="h-6 w-6 text-indigo-400" />
         </div>
       </CardHeader>
       <CardContent>
