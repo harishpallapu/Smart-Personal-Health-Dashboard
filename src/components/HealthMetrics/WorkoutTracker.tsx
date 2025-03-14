@@ -1,10 +1,8 @@
-
 import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Dumbbell, Check, Clock, Calendar, MoreHorizontal } from 'lucide-react';
+import { Check, Clock, Calendar, MoreHorizontal } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Progress } from '@/components/ui/progress';
 
 interface WorkoutPlan {
   id: string;
@@ -92,7 +90,7 @@ const WorkoutTracker: React.FC = () => {
             <CardTitle className="text-xl">Workout Tracker</CardTitle>
             <CardDescription>Track your fitness plan</CardDescription>
           </div>
-          <Dumbbell className="h-6 w-6 text-green-500" />
+          {/* Removed the Dumbbell Icon */}
         </div>
       </CardHeader>
       <CardContent className="space-y-4">
@@ -101,34 +99,7 @@ const WorkoutTracker: React.FC = () => {
             <p className="text-sm text-slate-500">Weekly Progress</p>
             <p className="text-2xl font-semibold">{totalWorkoutsCompleted} <span className="text-sm font-normal text-slate-500">of {workouts.length}</span></p>
           </div>
-          <div className="w-16 h-16 relative">
-            <svg viewBox="0 0 100 100" className="transform -rotate-90 w-full h-full">
-              <circle 
-                cx="50" 
-                cy="50" 
-                r="40" 
-                fill="none" 
-                stroke="#e2e8f0" 
-                strokeWidth="10"
-              />
-              <motion.circle 
-                cx="50" 
-                cy="50" 
-                r="40" 
-                fill="none" 
-                stroke="#22c55e" 
-                strokeWidth="10"
-                strokeDasharray="251.2"
-                initial={{ strokeDashoffset: 251.2 }}
-                animate={{ strokeDashoffset: 251.2 - (251.2 * completionPercentage / 100) }}
-                transition={{ duration: 1, ease: "easeInOut" }}
-                strokeLinecap="round"
-              />
-            </svg>
-            <div className="absolute inset-0 flex items-center justify-center">
-              <p className="text-sm font-medium">{Math.round(completionPercentage)}%</p>
-            </div>
-          </div>
+          {/* Removed the Pie Chart */}
         </div>
         
         <div className="grid grid-cols-7 gap-1">
@@ -157,7 +128,7 @@ const WorkoutTracker: React.FC = () => {
                     isCompleted ? (
                       <Check className="h-4 w-4 text-green-500" />
                     ) : (
-                      <Dumbbell className="h-4 w-4 text-slate-400" />
+                      <Check className="h-4 w-4 text-slate-400" />
                     )
                   ) : (
                     <span className="text-xs text-slate-300">-</span>
@@ -227,6 +198,7 @@ const WorkoutTracker: React.FC = () => {
                         </Button>
                       </div>
                       
+
                       <AnimatePresence>
                         {selectedWorkout === workout.id && (
                           <motion.div
@@ -272,10 +244,7 @@ const WorkoutTracker: React.FC = () => {
                 transition={{ duration: 0.3 }}
                 className="bg-slate-50 p-4 rounded-lg text-center"
               >
-                <p className="text-sm text-slate-500">No workouts scheduled for this day</p>
-                <Button size="sm" className="mt-2">
-                  Add Workout
-                </Button>
+                <p className="text-sm text-slate-500">No workouts planned for today</p>
               </motion.div>
             )}
           </AnimatePresence>
