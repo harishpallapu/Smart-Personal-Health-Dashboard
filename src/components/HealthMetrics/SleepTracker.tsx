@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Sunrise, Sunset } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
 
 const SleepTracker: React.FC = () => {
   const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
@@ -10,43 +10,22 @@ const SleepTracker: React.FC = () => {
   const [sleepData] = useState(() => {
     return days.map(day => {
       const hours = 5 + Math.random() * 4; // Between 5 and 9 hours
-      const quality = Math.floor(60 + Math.random() * 40); // Between 60 and 100%
-      
       return {
         day,
-        hours: parseFloat(hours.toFixed(1)),
-        quality
+        hours: parseFloat(hours.toFixed(1))
       };
     });
   });
   
-  const avgSleepHours = parseFloat((sleepData.reduce((acc, data) => acc + data.hours, 0) / sleepData.length).toFixed(1));
-  const avgSleepQuality = Math.round(sleepData.reduce((acc, data) => acc + data.quality, 0) / sleepData.length);
+  const totalHours = sleepData.reduce((acc, data) => acc + data.hours, 0);
   
-  const getSleepQualityCategory = (quality: number) => {
-    if (quality < 70) return { text: 'Poor', color: 'text-red-500' };
-    if (quality < 80) return { text: 'Fair', color: 'text-yellow-500' };
-    if (quality < 90) return { text: 'Good', color: 'text-green-500' };
-    return { text: 'Excellent', color: 'text-blue-500' };
-  };
+  const pieData = sleepData.map(data => ({
+    name: data.day,
+    value: data.hours
+  }));
   
-  const qualityCategory = getSleepQualityCategory(avgSleepQuality);
+  const COLORS = ['#8884d8', '#83a6ed', '#8dd1e1', '#82ca9d', '#a4de6c', '#d0ed57', '#ffc658'];
   
-  const CustomTooltip = ({ active, payload }: any) => {
-    if (active && payload && payload.length) {
-      return (
-        <div className="bg-white p-3 rounded-lg shadow-md text-sm border border-slate-100">
-          <p className="font-medium">{payload[0].payload.day}</p>
-          <p className="text-health-blue">{payload[0].value} hours</p>
-          <p className="text-slate-500">
-            Quality: {payload[0].payload.quality}%
-          </p>
-        </div>
-      );
-    }
-    return null;
-  };
-
   return (
     <Card className="w-full backdrop-blur-sm bg-white/80 border border-slate-200/70">
       <CardHeader className="pb-2">
@@ -66,74 +45,30 @@ const SleepTracker: React.FC = () => {
             <div className="opacity-60 mb-1">
               <Sunset className="h-5 w-5 mx-auto" />
             </div>
-            <p className="text-xs text-slate-500 mb-1">Average Sleep</p>
-            <p className="text-2xl font-semibold text-indigo-600">{avgSleepHours}h</p>
-          </motion.div>
-          
-          <motion.div 
-            whileHover={{ y: -2 }}
-            className="bg-gradient-to-br from-indigo-50 to-blue-50 rounded-xl p-4 text-center"
-          >
-            <div className="opacity-60 mb-1">
-              <Sunrise className="h-5 w-5 mx-auto" />
-            </div>
-            <p className="text-xs text-slate-500 mb-1">Sleep Quality</p>
-            <p className="text-2xl font-semibold text-indigo-600">{avgSleepQuality}%</p>
-            <p className={`text-xs ${qualityCategory.color}`}>{qualityCategory.text}</p>
+            <p className="text-xs text-slate-500 mb-1">Total Sleep</p>
+            <p className="text-2xl font-semibold text-indigo-600">{totalHours}h</p>
           </motion.div>
         </div>
         
-        <div className="h-[180px] w-full mt-6">
+        <div className="h-[250px] w-full mt-6">
           <ResponsiveContainer width="100%" height="100%">
-            <BarChart
-              data={sleepData}
-              margin={{
-                top: 5,
-                right: 5,
-                left: -20,
-                bottom: 5,
-              }}
-            >
-              <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" vertical={false} />
-              <XAxis 
-                dataKey="day" 
-                tick={{ fontSize: 10 }} 
-                axisLine={false} 
-              />
-              <YAxis 
-                domain={[0, 10]} 
-                tick={{ fontSize: 10 }} 
-                axisLine={false} 
-                tickLine={false} 
-              />
-              <Tooltip content={<CustomTooltip />} />
-              <Bar 
-                dataKey="hours" 
-                fill="#8b5cf6" 
-                radius={[4, 4, 0, 0]} 
-                barSize={28}
-              />
-            </BarChart>
+            <PieChart>
+              <Pie
+                data={pieData}
+                dataKey="value"
+                nameKey="name"
+                cx="50%"
+                cy="50%"
+                outerRadius={80}
+                label
+              >
+                {pieData.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                ))}
+              </Pie>
+              <Tooltip />
+            </PieChart>
           </ResponsiveContainer>
-        </div>
-        
-        <div className="mt-4 pt-2 space-y-3">
-          <div className="bg-slate-50 p-3 rounded-lg">
-            <p className="text-xs text-slate-500 mb-1">Sleep Recommendations</p>
-            <p className="text-sm">
-              Adults should aim for 7-9 hours of quality sleep per night for optimal health.
-            </p>
-          </div>
-          <div className="grid grid-cols-2 gap-3">
-            <div className="bg-slate-50 p-3 rounded-lg">
-              <p className="text-xs text-slate-500 mb-1">Bedtime</p>
-              <p className="text-sm font-medium">10:30 PM</p>
-            </div>
-            <div className="bg-slate-50 p-3 rounded-lg">
-              <p className="text-xs text-slate-500 mb-1">Wake Up</p>
-              <p className="text-sm font-medium">6:30 AM</p>
-            </div>
-          </div>
         </div>
       </CardContent>
     </Card>
