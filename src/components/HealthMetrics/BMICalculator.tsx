@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Slider } from '@/components/ui/slider';
 import { motion } from 'framer-motion';
+import { PieChart, Pie, Cell, Tooltip } from 'recharts';
 
 const BMICalculator: React.FC = () => {
   const [height, setHeight] = useState<number>(175);
@@ -20,7 +21,6 @@ const BMICalculator: React.FC = () => {
       const bmiValue = weight / (heightInMeters * heightInMeters);
       setBmi(parseFloat(bmiValue.toFixed(1)));
       
-      // Set category and color based on BMI
       if (bmiValue < 18.5) {
         setCategory('Underweight');
         setColor('text-blue-500');
@@ -37,6 +37,13 @@ const BMICalculator: React.FC = () => {
     }
   };
 
+  const data = [
+    { name: 'Underweight', value: bmi < 18.5 ? 100 : 0, color: '#3B82F6' },
+    { name: 'Normal weight', value: bmi >= 18.5 && bmi < 25 ? 100 : 0, color: '#10B981' },
+    { name: 'Overweight', value: bmi >= 25 && bmi < 30 ? 100 : 0, color: '#F59E0B' },
+    { name: 'Obese', value: bmi >= 30 ? 100 : 0, color: '#EF4444' },
+  ];
+
   return (
     <Card className="w-full backdrop-blur-sm bg-white/80 border border-slate-200/70">
       <CardHeader className="pb-2">
@@ -45,7 +52,6 @@ const BMICalculator: React.FC = () => {
             <CardTitle className="text-xl">BMI Calculator</CardTitle>
             <CardDescription>Calculate your Body Mass Index</CardDescription>
           </div>
-          {/* Removed Scale (BMI symbol) icon */}
         </div>
       </CardHeader>
       <CardContent>
@@ -61,6 +67,26 @@ const BMICalculator: React.FC = () => {
               <span className="text-4xl font-bold mb-1">{bmi}</span>
               <span className={`text-sm font-medium ${color}`}>{category}</span>
             </motion.div>
+          </div>
+          
+          <div className="flex justify-center">
+            <PieChart width={200} height={200}>
+              <Pie
+                data={data}
+                dataKey="value"
+                nameKey="name"
+                cx="50%"
+                cy="50%"
+                outerRadius={80}
+                fill="#8884d8"
+                label
+              >
+                {data.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={entry.color} />
+                ))}
+              </Pie>
+              <Tooltip />
+            </PieChart>
           </div>
           
           <div className="space-y-4">
@@ -92,17 +118,6 @@ const BMICalculator: React.FC = () => {
                 onValueChange={(val) => setWeight(val[0])}
                 className="py-2"
               />
-            </div>
-
-            <div className="pt-2 grid grid-cols-2 gap-3">
-              <div className="bg-slate-50 p-3 rounded-lg">
-                <p className="text-xs text-slate-500 mb-1">Normal BMI Range</p>
-                <p className="text-sm font-medium">18.5 - 24.9</p>
-              </div>
-              <div className="bg-slate-50 p-3 rounded-lg">
-                <p className="text-xs text-slate-500 mb-1">Healthy Weight</p>
-                <p className="text-sm font-medium">{Math.round((height/100) * (height/100) * 21.7)} - {Math.round((height/100) * (height/100) * 24.9)} kg</p>
-              </div>
             </div>
           </div>
         </div>
