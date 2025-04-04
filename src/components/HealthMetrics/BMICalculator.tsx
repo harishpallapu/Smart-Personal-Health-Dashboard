@@ -11,7 +11,7 @@ import { motion } from 'framer-motion';
 import { PieChart, Pie, Cell, Tooltip, Sector } from 'recharts';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Legend } from 'recharts';
 
-const COLORS = ['#4F46E5', '#E0E7FF']; // Primary + background color
+const COLORS = ['#4F46E5', '#E0E7FF']; 
 
 const renderActiveShape = (props: any) => {
   const RADIAN = Math.PI / 180;
