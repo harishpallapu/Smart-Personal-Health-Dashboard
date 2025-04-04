@@ -7,13 +7,13 @@ const COLORS = ['#6366F1', '#4F46E5', '#818CF8', '#A5B4FC', '#93C5FD', '#60A5FA'
 const SleepTracker: React.FC = () => {
   const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
-  // Generate random sleep data
+  
   const sleepData = days.map(day => ({
     name: day,
-    hours: parseFloat((5 + Math.random() * 4).toFixed(1)), // Between 5 and 9 hours
+    hours: parseFloat((5 + Math.random() * 4).toFixed(1)),
   }));
 
-  // Calculate total sleep hours for percentage calculation
+  
   const totalHours = sleepData.reduce((acc, data) => acc + data.hours, 0);
 
   return (
