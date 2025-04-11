@@ -1,5 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { ScatterChart, Scatter, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  Legend,
+} from 'recharts';
 
 const HeartRateScatterPlot: React.FC = () => {
   const [heartRateData, setHeartRateData] = useState<{ time: string; value: number }[]>([]);
@@ -20,13 +29,22 @@ const HeartRateScatterPlot: React.FC = () => {
   return (
     <div style={{ width: '100%', height: 300 }}>
       <ResponsiveContainer width="100%" height="100%">
-        <ScatterChart margin={{ top: 20, right: 20, bottom: 20, left: 0 }}>
+        <LineChart data={heartRateData} margin={{ top: 20, right: 30, bottom: 30, left: 20 }}>
           <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="time" name="Time" tick={{ fontSize: 12 }} />
-          <YAxis dataKey="value" name="Heart Rate (BPM)" domain={[50, 100]} tick={{ fontSize: 12 }} />
+          <XAxis
+            dataKey="time"
+            label={{ value: 'Time of Day', position: 'insideBottom', offset: -10 }}
+            tick={{ fontSize: 12 }}
+          />
+          <YAxis
+            domain={[50, 100]}
+            label={{ value: 'Heart Rate (BPM)', angle: -90, position: 'insideLeft' }}
+            tick={{ fontSize: 12 }}
+          />
           <Tooltip />
-          <Scatter name="Heart Rate Data" data={heartRateData} fill="#0088FE" />
-        </ScatterChart>
+          <Legend />
+          <Line type="monotone" dataKey="value" stroke="#ff6b6b" dot={{ r: 4 }} />
+        </LineChart>
       </ResponsiveContainer>
     </div>
   );
