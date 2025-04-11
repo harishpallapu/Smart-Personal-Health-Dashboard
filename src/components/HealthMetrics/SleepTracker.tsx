@@ -1,20 +1,18 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from 'recharts';
 
-const COLORS = ['#6366F1', '#4F46E5', '#818CF8', '#A5B4FC', '#93C5FD', '#60A5FA', '#3B82F6'];
+// Updated color palette
+const COLORS = ['#e41a1c', '#377eb8', '#4daf4a', '#984ea3', '#ff7f00', '#ffff33', '#a65628'];
 
 const SleepTracker: React.FC = () => {
   const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
-  
+  // Generate random sleep data
   const sleepData = days.map(day => ({
     name: day,
-    hours: parseFloat((5 + Math.random() * 4).toFixed(1)),
+    hours: parseFloat((5 + Math.random() * 4).toFixed(1)), // Between 5 and 9 hours
   }));
-
-  
-  const totalHours = sleepData.reduce((acc, data) => acc + data.hours, 0);
 
   return (
     <Card className="w-full backdrop-blur-sm bg-white/80 border border-slate-200/70">
@@ -32,14 +30,11 @@ const SleepTracker: React.FC = () => {
                 nameKey="name"
                 cx="50%"
                 cy="50%"
-                innerRadius={75}
                 outerRadius={100}
-                label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(1)}%`}
-                labelStyle={{
-                  fontSize: '14px',
-                  fontWeight: 'bold',
-                  fill: '#333',
-                }}
+                paddingAngle={2} // adds space between slices
+                label={({ name, hours }) => `${name}: ${hours}h`}
+                stroke="#fff"
+                strokeWidth={2}
               >
                 {sleepData.map((_, index) => (
                   <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
