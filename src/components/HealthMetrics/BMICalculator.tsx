@@ -11,7 +11,7 @@ import { motion } from 'framer-motion';
 import { PieChart, Pie, Cell, Tooltip, Sector } from 'recharts';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Legend } from 'recharts';
 
-const COLORS = ['#4F46E5', '#E0E7FF']; 
+const COLORS = ['#4F46E5', '#E0E7FF']; // Primary + background color
 
 const renderActiveShape = (props: any) => {
   const RADIAN = Math.PI / 180;
@@ -25,8 +25,6 @@ const renderActiveShape = (props: any) => {
     endAngle,
     fill,
     payload,
-    percent,
-    value,
   } = props;
 
   const sin = Math.sin(-RADIAN * midAngle);
@@ -57,6 +55,7 @@ const BMICalculator: React.FC = () => {
   const [weight, setWeight] = useState<number>(70);
   const [bmi, setBmi] = useState<number>(0);
   const [category, setCategory] = useState<string>('');
+  const [weightChange, setWeightChange] = useState<string>('');
   const [activeIndex, setActiveIndex] = useState<number>(0);
 
   useEffect(() => {
@@ -67,8 +66,23 @@ const BMICalculator: React.FC = () => {
     if (height > 0 && weight > 0) {
       const heightInMeters = height / 100;
       const bmiValue = weight / (heightInMeters ** 2);
-      setBmi(parseFloat(bmiValue.toFixed(1)));
-      determineBMICategory(bmiValue);
+      const roundedBMI = parseFloat(bmiValue.toFixed(1));
+      setBmi(roundedBMI);
+      determineBMICategory(roundedBMI);
+
+      // Normal BMI range: 18.5 - 24.9
+      const minNormalWeight = 18.5 * (heightInMeters ** 2);
+      const maxNormalWeight = 24.9 * (heightInMeters ** 2);
+
+      if (roundedBMI < 18.5) {
+        const gain = (minNormalWeight - weight).toFixed(1);
+        setWeightChange(`Gain ~${gain} kg to reach normal BMI`);
+      } else if (roundedBMI > 24.9) {
+        const lose = (weight - maxNormalWeight).toFixed(1);
+        setWeightChange(`Lose ~${lose} kg to reach normal BMI`);
+      } else {
+        setWeightChange('You are in the normal range');
+      }
     }
   };
 
@@ -118,6 +132,9 @@ const BMICalculator: React.FC = () => {
             >
               <span className="text-4xl font-bold mb-1">{bmi}</span>
               <span className="text-sm font-medium text-slate-500">{category}</span>
+              {weightChange && (
+                <p className="text-sm text-slate-600 text-center mt-2">{weightChange}</p>
+              )}
             </motion.div>
           </div>
 
@@ -155,7 +172,7 @@ const BMICalculator: React.FC = () => {
             <Tooltip />
             <Legend />
             <Bar dataKey="men" fill="#4F46E5" name="Men" />
-            <Bar dataKey="women" fill="#22C55E" name="Women" />
+            <Bar dataKey="women" fill="#FFC0CB" name="Women" />
           </BarChart>
 
           <div className="space-y-4">
